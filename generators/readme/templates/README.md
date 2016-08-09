@@ -32,6 +32,6 @@ var <%= safeProjectName %> = require('<%= projectName %>');
 [daviddm-image]: https://david-dm.org/<%= githubAccount %>/<%= projectName %>.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/<%= githubAccount %>/<%= projectName %>
 <% if (includeCoveralls) { -%>
-[coveralls-image]: https://coveralls.io/repos/<%= githubAccount %>/<%= projectName %>/badge.svg
+[coveralls-image]: https://coveralls.io/repos/github/<%= githubAccount %>/<%= projectName %>/badge.svg
 [coveralls-url]: https://coveralls.io/r/<%= githubAccount %>/<%= projectName %>
 <% } -%>
