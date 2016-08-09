@@ -1,6 +1,7 @@
 'use strict';
 var _ = require('lodash');
 var generators = require('yeoman-generator');
+var extend = _.merge;
 
 module.exports = generators.Base.extend({
   constructor: function () {
@@ -24,8 +25,28 @@ module.exports = generators.Base.extend({
       desc: 'Compile ES2015 using Babel'
     });
   },
+  writing: {
+    package: function () {
+      var pkg = this.fs.readJSON(this.destinationPath(this.options.generateInto, 'package.json'), {});
 
-  writing: function () {
+      extend(pkg, {
+        devDependencies: {
+          'proxy-sinon-chai': '^0.0.1'
+      },
+    "eslintConfig": {
+      "rules":{
+        "indent": ["error", 4]
+      },
+      "env": {
+        "mocha": true
+      },
+      "extends": "xo"
+    }
+    });
+
+      this.fs.writeJSON(this.destinationPath(this.options.generateInto, 'package.json'), pkg);
+    },
+  template: function () {
     this.fs.copyTpl(
       this.templatePath('index.js'),
       this.destinationPath(this.options.generateInto, 'lib/index.js'), {
@@ -42,4 +63,5 @@ module.exports = generators.Base.extend({
       }
     );
   }
+}
 });
