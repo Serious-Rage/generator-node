@@ -1,7 +1,9 @@
 'use strict';
 var path = require('path');
-var extend = require('lodash').merge;
+var _ = require('lodash');
+var extend = _.merge;
 var generators = require('yeoman-generator');
+var packageJson = require('./packages/package');
 
 module.exports = generators.Base.extend({
   constructor: function () {
@@ -46,16 +48,15 @@ module.exports = generators.Base.extend({
       var pkg = this.fs.readJSON(this.destinationPath(this.options.generateInto, 'package.json'), {});
 
       extend(pkg, {
-        devDependencies: {
-          'gulp': '^3.9.0',
-          'gulp-eslint': '^2.0.0',
-          'gulp-exclude-gitignore': '^1.0.0',
-          'gulp-line-ending-corrector': '^1.0.1',
-          'gulp-istanbul': '^1.0.0',
-          'gulp-mocha': '^2.0.0',
-          'gulp-plumber': '^1.0.0',
-          'gulp-nsp': '^2.1.0'
-        },
+        devDependencies:_.pick(packageJson.devDependencies,
+        [ 'gulp',
+          'gulp-eslint',
+          'gulp-exclude-gitignore',
+          'gulp-istanbul',
+          'gulp-line-ending-corrector',
+          'gulp-mocha',
+          'gulp-nsp',
+          'gulp-plumber' ]),
         scripts: {
           prepublish: 'gulp prepublish',
           test: 'gulp'
@@ -63,16 +64,20 @@ module.exports = generators.Base.extend({
       });
 
       if (this.options.coveralls) {
-        pkg.devDependencies['gulp-coveralls'] = '^0.1.0';
+          extend(pkg, {
+            devDependencies:_.pick(packageJson.devDependencies,
+            [ 'gulp-coveralls' ])
+        });
       }
 
       if (this.options.babel) {
-        pkg.devDependencies['gulp-babel'] = '^6.1.2';
-        pkg.devDependencies.del = '^2.0.2';
-        pkg.devDependencies['babel-core'] = '^6.11.4';
-        pkg.devDependencies['babel-register'] = '^6.9.0';
-        pkg.devDependencies['babel-preset-es2015'] = '6.9.0';
-        pkg.devDependencies.isparta = '^4.0.0';
+          extend(pkg, {
+            devDependencies:_.pick(packageJson.devDependencies,
+              [ 'gulp-babel',
+                'del',
+                'babel-core',
+                'isparta'])
+        });
       }
 
       if (this.options.cli) {
@@ -107,7 +112,7 @@ module.exports = generators.Base.extend({
           babel: this.options.babel,
           tasks: stringifyArray(tasks),
           prepublishTasks: stringifyArray(prepublishTasks),
-          projectRoot: path.join(this.options.projectRoot, '**/*.js').replace(/\\/g, '/')
+          projectRoot: path.join(this.options.projectRoot, '**/*.js')
         }
       );
     },
