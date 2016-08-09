@@ -8,7 +8,7 @@ var path = require('path');
 var askName = require('inquirer-npm-name');
 
 module.exports = generators.Base.extend({
-  constructor: function () {
+  constructor: function() {
     generators.Base.apply(this, arguments);
 
     this.option('travis', {
@@ -28,6 +28,7 @@ module.exports = generators.Base.extend({
     this.option('babel', {
       type: Boolean,
       required: false,
+      defaults: false,
       desc: 'Compile ES2015 using Babel'
     });
 
@@ -84,7 +85,7 @@ module.exports = generators.Base.extend({
     });
   },
 
-  initializing: function () {
+  initializing: function() {
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
 
     // Pre set the default props from the information we have at this point
@@ -109,7 +110,7 @@ module.exports = generators.Base.extend({
   },
 
   prompting: {
-    askForModuleName: function () {
+    askForModuleName: function() {
       if (this.pkg.name || this.options.name) {
         this.props.name = this.pkg.name || _.kebabCase(this.options.name);
         return;
@@ -120,15 +121,15 @@ module.exports = generators.Base.extend({
         message: 'Module Name',
         default: path.basename(process.cwd()),
         filter: _.kebabCase,
-        validate: function (str) {
+        validate: function(str) {
           return str.length > 0;
         }
-      }, this).then(function (answer) {
+      }, this).then(function(answer) {
         this.props.name = answer.name;
       }.bind(this));
     },
 
-    askFor: function () {
+    askFor: function() {
       var prompts = [{
         name: 'description',
         message: 'Description',
@@ -158,7 +159,7 @@ module.exports = generators.Base.extend({
         name: 'keywords',
         message: 'Package keywords (comma to split)',
         when: !this.pkg.keywords,
-        filter: function (words) {
+        filter: function(words) {
           return words.split(/\s*,\s*/g);
         }
       }, {
@@ -198,7 +199,7 @@ module.exports = generators.Base.extend({
           name: 'githubAccount',
           message: 'GitHub username or organization',
           default: username
-        }).then(function (prompt) {
+        }).then(function(prompt) {
           this.props.githubAccount = prompt.githubAccount;
           done();
         }.bind(this));
@@ -206,7 +207,7 @@ module.exports = generators.Base.extend({
     }
   },
 
-  writing: function () {
+  writing: function() {
     // Re-read the content at this point because a composed generator might modify it.
     var currentPkg = this.fs.readJSON(this.destinationPath('package.json'), {});
 
@@ -239,7 +240,7 @@ module.exports = generators.Base.extend({
     this.fs.writeJSON(this.destinationPath('package.json'), pkg);
   },
 
-  default: function () {
+  default: function() {
     if (this.options.travis) {
       this.composeWith('travis', {}, {
         local: require.resolve('generator-travis/generators/app')
