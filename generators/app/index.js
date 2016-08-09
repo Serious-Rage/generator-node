@@ -171,21 +171,26 @@ module.exports = generators.Base.extend({
         type: 'confirm',
         message: 'Send coverage reports to coveralls',
         when: this.options.coveralls === undefined
+      }, {
+        name: 'createGithubRepository',
+        type: 'confirm',
+        message: 'Create Github repository ?',
+        when: true
       }];
 
-      return this.prompt(prompts).then(function (props) {
+      return this.prompt(prompts).then(function(props) {
         this.props = extend(this.props, props);
       }.bind(this));
     },
 
-    askForGithubAccount: function () {
+    askForGithubAccount: function() {
       if (this.options.githubAccount) {
         this.props.githubAccount = this.options.githubAccount;
         return;
       }
       var done = this.async();
 
-      githubUsername(this.props.authorEmail, function (err, username) {
+      githubUsername(this.props.authorEmail, function(err, username) {
         if (err) {
           username = username || '';
         }
@@ -255,6 +260,7 @@ module.exports = generators.Base.extend({
 
     this.composeWith('node:git', {
       options: {
+        createGithubRepository: this.props.createGithubRepository,
         name: this.props.name,
         githubAccount: this.props.githubAccount
       }
