@@ -3,5 +3,5 @@ export default {};
 <% } else { -%>
 'use strict';
 
-module.exports = {};
+module.exports = 'supermodule';
 <% } -%>

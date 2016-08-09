@@ -1,15 +1,15 @@
-<% if (babel) { -%>
-import assert from 'assert';
-import <%= pkgSafeName %> from '../lib';
-<% } else { -%>
 'use strict';
+var psc = require('proxy-sinon-chai');
+var expect = psc.expect;
+var proxyquire = psc.proxyquire;
 
-var assert = require('assert');
-var <%= pkgSafeName %> = require('../lib');
-<% } -%>
+var <%= pkgSafeName %> = proxyquire('../lib');
 
 describe('<%= pkgName %>', function () {
-  it('should have unit test!', function () {
-    assert(false, 'we expected this package author to add actual unit tests.');
-  });
+    beforeEach(() => {
+    });
+
+    it('should have a supermodule test!', function () {
+        expect(<%= pkgSafeName %>, 'supermodule');
+    });
 });
