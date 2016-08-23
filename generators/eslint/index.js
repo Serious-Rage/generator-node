@@ -1,6 +1,8 @@
 'use strict';
 var generators = require('yeoman-generator');
-var extend = require('lodash').merge;
+var _ = require('lodash');
+var extend = _.merge;
+var packageJson = require('./packages/package');
 
 module.exports = generators.Base.extend({
   constructor: function () {
@@ -22,17 +24,23 @@ module.exports = generators.Base.extend({
 
   writing: function () {
     var pkg = this.fs.readJSON(this.destinationPath(this.options.generateInto, 'package.json'), {});
-
+    var devDep;
     var eslintConfig = {
       extends: 'xo-space',
       env: {
         mocha: true
       }
     };
-    var devDep = {
-      'eslint': '^3.1.1',
-      'eslint-config-xo-space': '^0.14.0'
-    };
+
+
+
+    extend(pkg, {
+      devDependencies:_.pick(packageJson.devDependencies,
+      [ 'eslint',
+        'eslint-config-xo',
+        'eslint-config-xo-space'])
+    });
+    devDep = pkg.devDependencies;
 
     if (this.options.es2015) {
       devDep['babel-eslint'] = '^6.1.2';
