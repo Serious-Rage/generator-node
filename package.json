@@ -14,6 +14,8 @@
   "author": "Yeoman team",
   "repository": "yeoman/generator-node",
   "scripts": {
+    "david": "for f in `find generators -maxdepth 3 -name package.json`;do david `dirname $f`;done",
+    "david-update": "for f in `find generators -maxdepth 3 -name package.json`;do david update `dirname $f`;done",
     "test": "gulp",
     "prepublish": "gulp prepublish"
   },
@@ -28,6 +30,7 @@
     "yeoman-generator": "^0.23.3"
   },
   "devDependencies": {
+    "david": "^8.0.0",
     "eslint": "^2.0.0",
     "eslint-config-xo": "^0.14.1",
     "eslint-config-xo-space": "^0.13.0",
