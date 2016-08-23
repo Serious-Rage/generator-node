@@ -1,9 +1,10 @@
 'use strict';
+
 var psc = require('proxy-sinon-chai');
 var expect = psc.expect;
-var proxyquire = psc.proxyquire;
+// var proxyquire = psc.proxyquire;
 
-var <%= pkgSafeName %> = proxyquire('../lib');
+var <%= pkgSafeName %> = require('../lib');
 
 describe('<%= pkgName %>', function () {
     beforeEach(() => {
